@@ -27,7 +27,15 @@ class CrawlerConfig(BaseModel):
     ]
     
     # Custom Headers
-    user_agent: str = "SitewiseCrawler/0.1.0 (+https://github.com/tarxemo/sitewise-crawler)"
+    user_agent: str = "SitewiseCrawler/0.1.1 (+https://github.com/tarxemo/sitewise-crawler)"
+
+    @classmethod
+    def for_single_url(cls, url: str, **kwargs) -> "CrawlerConfig":
+        """
+        Factory shortcut for analyzing a single page without BFS crawling.
+        Ideal for on-demand URL risk assessment.
+        """
+        return cls(start_url=url, max_pages=1, max_depth=0, **kwargs)
 
 class PageData(BaseModel):
     """Data extracted from a single page."""
