@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sitewise-crawler"
+version = "0.1.0"
+authors = [
+  { name="TarXemo", email="info@tarxemo.com" },
+]
+description = "A flexible and advanced web crawler for modern SPAs and traditional websites."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+]
+dependencies = [
+    "requests",
+    "beautifulsoup4",
+    "playwright",
+    "trafilatura",
+    "lxml",
+    "pydantic",
+    "aiohttp",
+    "tenacity",
+    "pypdf",
+    "python-docx",
+    "groq",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/tarxemo/sitewise-crawler"
+"Bug Tracker" = "https://github.com/tarxemo/sitewise-crawler/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
