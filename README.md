@@ -1,0 +1,75 @@
+# Sitewise Crawler 🕷️
+
+An advanced, flexible, and production-ready web crawler for modern websites. Automatically detects SPAs (Single Page Applications) and switches between fast `requests` fetching and full JavaScript rendering with `Playwright`.
+
+## ✨ Features
+
+- 🚀 **Hybrid Rendering**: Automatically detects React, Vue, Angular, and Next.js to switch rendering engines on the fly.
+- 🧠 **Smart Extraction**: Built-in main content extraction that removes headers, footers, and sidebars.
+- 🔗 **SPA Link Discovery**: Discovers links even in complex client-side routers.
+- 🛠️ **Fully Configurable**: Control depth, concurrency, rate limits, and custom wait selectors.
+- 📝 **Pydantic Models**: Type-safe configuration and results.
+
+## 📦 Installation
+
+```bash
+pip install sitewise-crawler
+playwright install chromium
+```
+
+## 🚀 Quick Start
+
+```python
+import asyncio
+from sitewise_crawler import SPACrawler, CrawlerConfig
+
+async def main():
+    # 1. Configure the crawler
+    config = CrawlerConfig(
+        start_url="https://example.com",
+        max_depth=2,
+        max_pages=10,
+        use_playwright=True,
+        headless=True
+    )
+
+    # 2. Initialize and run
+    crawler = SPACrawler(config)
+    
+    # Optional: Add a callback for each page crawled
+    crawler.on_page_crawled = lambda page: print(f"Crawled: {page.url} | Title: {page.title}")
+
+    result = await crawler.crawl()
+
+    # 3. Process results
+    if result.success:
+        print(f"\n✅ Crawl complete! Found {result.total_pages} pages.")
+        for page in result.pages_all:
+            print(f"- {page.url} ({len(page.content)} chars)")
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+## ⚙️ Configuration Options
+
+The `CrawlerConfig` class supports the following parameters:
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `start_url` | `str` | *Required* | The entry point for the crawler. |
+| `max_depth` | `int` | `3` | Maximum crawl depth from the start URL. |
+| `max_pages` | `int` | `100` | Stop crawling after this many pages. |
+| `use_playwright` | `bool` | `True` | Enable JavaScript rendering for SPAs. |
+| `headless` | `bool` | `True` | Run browser in headless mode. |
+| `rate_limit_delay` | `float` | `1.0` | Seconds to wait between requests. |
+| `wait_for_selector`| `str` | `None` | CSS selector to wait for before extracting SPA content. |
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+# sitewise_crawler
