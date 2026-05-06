@@ -1,6 +1,6 @@
 import logging
 from abc import ABC, abstractmethod
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Any
 import requests
 from bs4 import BeautifulSoup
 from .models import CrawlerConfig

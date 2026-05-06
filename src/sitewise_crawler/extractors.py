@@ -1,6 +1,6 @@
 import re
 from urllib.parse import urljoin, urlparse, urlunparse
-from typing import List, Set
+from typing import List, Set, Optional
 from bs4 import BeautifulSoup
 import trafilatura
 

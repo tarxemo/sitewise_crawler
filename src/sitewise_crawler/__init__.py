@@ -4,7 +4,7 @@ from .fetchers import RequestsFetcher, PlaywrightFetcher
 from .extractors import LinkExtractor, ContentExtractor, SPADetector, DomainClassifier
 from .analyzer import InsightEngine
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __all__ = [
     # Core Crawling
     "SPACrawler",
