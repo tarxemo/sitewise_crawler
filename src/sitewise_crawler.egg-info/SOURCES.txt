@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+src/sitewise_crawler/__init__.py
+src/sitewise_crawler/analyzer.py
+src/sitewise_crawler/crawler.py
+src/sitewise_crawler/extractors.py
+src/sitewise_crawler/fetchers.py
+src/sitewise_crawler/models.py
+src/sitewise_crawler.egg-info/PKG-INFO
+src/sitewise_crawler.egg-info/SOURCES.txt
+src/sitewise_crawler.egg-info/dependency_links.txt
+src/sitewise_crawler.egg-info/requires.txt
+src/sitewise_crawler.egg-info/top_level.txt
+tests/test_analyzer.py
+tests/test_local.py
