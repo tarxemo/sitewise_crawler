@@ -107,7 +107,11 @@ class SPACrawler:
             if SPADetector.is_spa(content) and self.config.use_playwright:
                 logger.info(f"SPA detected for {url}, switching to Playwright")
                 is_spa = True
-                content, status, title, content_type = await self.playwright_fetcher.fetch(url, self.config)
+                new_content, status, title, content_type = await self.playwright_fetcher.fetch(url, self.config)
+                if new_content:
+                    content = new_content
+                else:
+                    logger.warning(f"Playwright fetch failed for {url}, falling back to static HTML.")
             
             # Extract HTML content
             text_content = ContentExtractor.clean_text(content)

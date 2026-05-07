@@ -15,7 +15,7 @@ class InsightEngine:
     Advanced engine for analyzing user behavior based on visited content.
     Uses AI (Groq) to provide deep insights.
     """
-    def __init__(self, api_key: str, model: str = "llama-3.1-70b-versatile"):
+    def __init__(self, api_key: str, model: str = "llama-3.3-70b-versatile"):
         self.client = Groq(api_key=api_key)
         self.model = model
 

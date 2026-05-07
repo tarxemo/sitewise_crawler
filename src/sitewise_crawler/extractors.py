@@ -42,6 +42,8 @@ class ContentExtractor:
     @staticmethod
     def clean_text(html: str) -> str:
         """Extract main content text, removing boilerplates."""
+        if not html:
+            return ""
         # Use trafilatura for high-quality extraction
         content = trafilatura.extract(html, include_comments=False, include_tables=True, no_fallback=False)
         if not content:

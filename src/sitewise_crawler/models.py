@@ -11,8 +11,8 @@ class CrawlerConfig(BaseModel):
     timeout_ms: int = Field(default=30000, ge=1000)
     rate_limit_delay: float = Field(default=1.0, ge=0.0)
     
-    # SPA Settings
-    use_playwright: bool = True
+    # SPA Settings (Disabled by default to avoid heavy browser dependencies)
+    use_playwright: bool = False
     headless: bool = True
     wait_for_selector: Optional[str] = None
     js_wait_time: int = 2000
