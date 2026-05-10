@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sitewise-crawler"
-version = "0.1.4"
+version = "0.2.0"
 authors = [
   { name="TarXemo", email="info@tarxemo.com" },
 ]
-description = "A flexible and advanced web crawler for modern SPAs and traditional websites."
+description = "Advanced browser-activity capture, behavioral profiling, alerting and reporting library for Python."
 readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [

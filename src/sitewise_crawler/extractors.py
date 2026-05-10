@@ -39,9 +39,21 @@ class LinkExtractor:
         return list(set(normalized))
 
 class ContentExtractor:
+    """
+    Intelligent text extraction engine for HTML and binary documents.
+    
+    This module implements a multi-stage extraction pipeline:
+    1.  **Sanitization**: Cleans noise and boilerplate from HTML.
+    2.  **Semantic Core Extraction**: Uses `trafilatura` to identify the 
+        primary content blocks.
+    3.  **Binary Processing**: Decodes PDF and Word documents into plain text 
+        for behavioral analysis.
+    """
     @staticmethod
     def clean_text(html: str) -> str:
-        """Extract main content text, removing boilerplates."""
+        """
+        Extracts high-quality main content text, stripping ads and boilerplate.
+        """
         if not html:
             return ""
         # Use trafilatura for high-quality extraction
@@ -59,7 +71,9 @@ class ContentExtractor:
 
     @staticmethod
     def extract_from_binary(content: bytes, content_type: str) -> str:
-        """Extract text from non-HTML binary files (PDF, Docx)."""
+        """
+        Extract text from non-HTML binary files (PDF, Docx).
+        """
         import io
         
         # Handle PDF
@@ -88,9 +102,12 @@ class ContentExtractor:
 
 class DomainClassifier:
     """
-    Fast, zero-network domain-level category lookup.
-    Avoids unnecessary scraping/AI calls for well-known websites.
-    Add to KNOWN_CATEGORIES to expand coverage.
+    High-performance, zero-network domain classification engine.
+    
+    This engine serves as a fast first-pass filter to identify well-known 
+    websites without triggering a network-heavy crawl or AI analysis. 
+    It maintains a dictionary of top domains mapped to behavioral categories 
+    and associated risk levels.
     """
     KNOWN_CATEGORIES: dict = {
         # Development & Tech

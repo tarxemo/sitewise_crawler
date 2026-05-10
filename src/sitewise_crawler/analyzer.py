@@ -12,8 +12,18 @@ logger = logging.getLogger(__name__)
 
 class InsightEngine:
     """
-    Advanced engine for analyzing user behavior based on visited content.
-    Uses AI (Groq) to provide deep insights.
+    Advanced engine for analyzing user behavior based on visited web content.
+    
+    The InsightEngine serves as the high-level orchestrator for behavioral
+    intelligence. It integrates web crawling (via SPACrawler), content 
+    extraction (via Trafilatura), and Large Language Model processing (via Groq)
+    to transform raw URLs into a structured behavioral profile.
+    
+    Architecture:
+    1.  **Extraction**: Fetches and sanitizes content from a batch of URLs.
+    2.  **Consolidation**: Normalizes and chunks text to optimize LLM context usage.
+    3.  **Synthesis**: Uses Zero-Shot classification and multi-dimensional analysis 
+        to compute productivity, sentiment, and intent.
     """
     def __init__(self, api_key: str, model: str = "llama-3.3-70b-versatile"):
         self.client = Groq(api_key=api_key)
@@ -30,7 +40,19 @@ class InsightEngine:
         crawler_config: Optional[CrawlerConfig] = None
     ) -> UserInsight:
         """
-        Scrapes a list of URLs and performs intensive AI analysis on the content.
+        Executes a full-spectrum behavioral analysis for a specific user.
+        
+        This method performs a deep-crawl of the provided URLs, extracts 
+        the semantic core of each page, and triggers the AI analysis pipeline.
+        
+        Args:
+            user_id: Unique identifier for the subject being analyzed.
+            urls: A list of URL strings representing the user's browsing history.
+            crawler_config: Optional configuration for the scraping engine (depth, timeout, etc.)
+            
+        Returns:
+            A `UserInsight` object containing multidimensional behavioral metrics 
+            ranging from productivity scores to psychological well-being indicators.
         """
         logger.info(f"Starting behavioral analysis for user {user_id} with {len(urls)} URLs")
 
