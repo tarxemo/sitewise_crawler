@@ -190,6 +190,21 @@ class ProfileBlender:
         if risk_spike:
             updated.behavioral_summary = "⚠️ Sudden spike in high-risk content detected. " + (updated.behavioral_summary or "")
         
+        # Incremental Summary Aggregation
+        new_insight = risk_result.get("behavioral_insight")
+        if new_insight:
+            # If the profile was a mock/simulated one, clear it and start fresh with real data
+            is_simulated = profile.raw_ai_response.get("simulated", False)
+            if is_simulated:
+                updated.behavioral_summary = f"Real-time monitoring active. Recent: {new_insight}."
+                updated.raw_ai_response["simulated"] = False # Mark as no longer simulated
+            else:
+                # Append to existing summary, keeping it concise
+                current_summary = profile.behavioral_summary or ""
+                if len(current_summary) > 300: # Truncate if too long
+                    current_summary = "..." + current_summary[-200:]
+                updated.behavioral_summary = f"{current_summary}\n• {new_insight}."
+
         if category != "Unknown":
             updated.top_categories = cls.update_top_categories(
                 profile.top_categories, category, n

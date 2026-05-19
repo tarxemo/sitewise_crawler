@@ -137,4 +137,4 @@ The `CrawlerConfig` allows fine-grained control:
 This library is part of the **AegiVara** ecosystem. For bug reports or feature requests, please open an issue in the main repository.
 
 ---
-**License**: MIT — Developed by **TarXemo**.
+**License**: MIT — Developed by **Group 8 FYP 2026**.

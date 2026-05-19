@@ -199,11 +199,12 @@ class InsightEngine:
             prompt = f"""
 You are a URL Risk Assessment AI. Analyze this webpage content and return ONLY a JSON object:
 {{
-    "status": "Safe",
+    "status": "Safe" | "Suspicious" | "Blocked",
     "risk_score": 0.0,
     "category": "single category label",
     "nsfw_probability": 0.0,
-    "reason": "one sentence explanation"
+    "reason": "one sentence risk explanation",
+    "behavioral_insight": "A short (max 10 words) insight into what this activity means for the user's profile (e.g., 'Researching microservices', 'Consuming technical news')"
 }}
 
 URL: {url}
