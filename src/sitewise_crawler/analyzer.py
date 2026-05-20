@@ -26,8 +26,66 @@ class InsightEngine:
         to compute productivity, sentiment, and intent.
     """
     def __init__(self, api_key: str, model: str = "llama-3.3-70b-versatile"):
-        self.client = Groq(api_key=api_key)
+        import random
+        if isinstance(api_key, str):
+            self.api_keys = [k.strip() for k in api_key.split(",") if k.strip()]
+        elif isinstance(api_key, list):
+            self.api_keys = [str(k).strip() for k in api_key if str(k).strip()]
+        else:
+            self.api_keys = []
+            
+        if not self.api_keys:
+            raise ValueError("No valid GROQ API keys provided.")
+            
+        # Randomize starting key to balance load across keys
+        self.current_key_index = random.randint(0, len(self.api_keys) - 1)
         self.model = model
+        self._clients = {}
+
+    @property
+    def client(self):
+        """Dynamic property returning the Groq client for the current active key (backward compatibility)."""
+        key = self.api_keys[self.current_key_index]
+        if key not in self._clients:
+            self._clients[key] = Groq(api_key=key)
+        return self._clients[key]
+
+    def _call_chat_completions(self, **kwargs) -> Any:
+        """
+        Calls the Groq chat completions API with automatic key rotation and failover.
+        """
+        import groq
+        attempts = len(self.api_keys)
+        last_error = None
+        
+        for i in range(attempts):
+            key = self.api_keys[self.current_key_index]
+            logger.info(f"Attempting Groq API call using key index {self.current_key_index} (starts with {key[:8]}...)")
+            
+            # Initialize client on the fly or retrieve cached
+            if key not in self._clients:
+                self._clients[key] = Groq(api_key=key)
+            
+            client = self._clients[key]
+            try:
+                return client.chat.completions.create(**kwargs)
+            except (groq.APIStatusError, groq.APIConnectionError, groq.RateLimitError) as e:
+                logger.warning(
+                    f"Groq API error with key index {self.current_key_index}: {e}. "
+                    f"Rotating to next key."
+                )
+                last_error = e
+            except Exception as e:
+                logger.warning(
+                    f"Unexpected error during Groq API call with key index {self.current_key_index}: {e}. "
+                    f"Rotating to next key."
+                )
+                last_error = e
+            
+            # Rotate key index
+            self.current_key_index = (self.current_key_index + 1) % len(self.api_keys)
+            
+        raise RuntimeError(f"All {attempts} Groq API keys failed. Last error: {last_error}")
 
     # ─────────────────────────────────────────────────────────────
     # PRIMARY ASYNC API
@@ -212,7 +270,7 @@ Title: {page.title}
 Content preview:
 {content_preview}
 """
-            chat_completion = self.client.chat.completions.create(
+            chat_completion = self._call_chat_completions(
                 messages=[
                     {"role": "system", "content": "You are a URL content risk classifier. Output strictly valid JSON only."},
                     {"role": "user", "content": prompt}
@@ -282,7 +340,7 @@ Content to analyze:
 {content}
 """
         try:
-            chat_completion = self.client.chat.completions.create(
+            chat_completion = self._call_chat_completions(
                 messages=[
                     {
                         "role": "system",
